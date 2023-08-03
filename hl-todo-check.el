@@ -59,7 +59,7 @@
 (defun hl-todo-flycheck--get-all-modes ()
   (interactive)
   (seq-uniq
-   (mapcan (lambda (checker) (flycheck-checker-get checker 'modes))
+   (mapcan (lambda (checker) (mapcar #'copy-sequence  (flycheck-checker-get checker 'modes)))
            flycheck-checkers)))
 
   
