@@ -6,4 +6,7 @@
 // FIXME: ALGO ROTO
 
 
+int main(){
+  return 0;
+}
 
