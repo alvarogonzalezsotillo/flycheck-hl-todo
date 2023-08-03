@@ -58,8 +58,9 @@
 
 (defun hl-todo-flycheck--get-all-modes ()
   (interactive)
-  (mapcan (lambda (checker) (flycheck-checker-get checker 'modes))
-               flycheck-checkers))
+  (seq-uniq
+   (mapcan (lambda (checker) (flycheck-checker-get checker 'modes))
+           flycheck-checkers)))
 
   
 
@@ -71,11 +72,7 @@
     :start 'hl-todo-flycheck--start
     :modes (hl-todo-flycheck--get-all-modes))
 
-  (add-to-list 'flycheck-checkers 'hl-todo t)
-
-  (dolist (checker '(c/c++-clang c/c++-gcc c/c++-cppcheck emacs-lisp))
-    ;;(message "%s" checker)
-    (flycheck-add-next-checker checker 'hl-todo)))
+  (add-to-list 'flycheck-checkers 'hl-todo t))
 
 
 
