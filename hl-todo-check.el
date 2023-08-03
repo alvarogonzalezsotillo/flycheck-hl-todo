@@ -17,9 +17,13 @@
 ;;   :modes scala-mode
 ;;   :next-checkers ((warning . scala-scalastyle)))
 
+(require 'hl-todo)
+(require 'flycheck)
+
+
 ;; PROMT: elisp function that receives a regex and returns a list of
 ;; line numbers where the regex matches the current buffer
-(defun hl-todo--occur-to-flycheck-error (&optional buffer regex)
+(defun hl-todo-flycheck--occur-to-error (&optional buffer regex)
   "Find lines in the current buffer where the given regex matches. Return a list of (position text)"
   (let* ((buffer (or buffer (current-buffer)))
          (regex (or regex (hl-todo--regexp)))
@@ -30,7 +34,7 @@
           (goto-char (point-min))
           (let ((case-fold-search nil)) ;; Only exact case in search
             (while (re-search-forward regex nil t)
-              (message "buscando en:%s" (point))
+              ;;(message "buscando en:%s" (point))
 
               (let* ((pos (point))
                      (bol (line-beginning-position))
@@ -40,28 +44,38 @@
                 (push (list pos msg) occurrences)))))))
     occurrences))
 
-(defun flycheck-hl-todo-start (checker callback)
-  (message "flycheck-hl-todo-start")
+(defun hl-todo-flycheck--start (checker callback)
+  ;;(message "hl-todo-flycheck--start")
   (funcall
    callback 'finished
    (mapcar (lambda (pos-and-msg)
              (let ((pos (nth 0 pos-and-msg))
                    (msg (nth 1 pos-and-msg)))
-               (message "nuevo error:%s %s" pos msg)
+               ;;(message "nuevo error:%s %s" pos msg)
                (flycheck-error-new-at-pos pos 'info msg :checker checker)
                ))
-           (hl-todo--occur-to-flycheck-error))))
+           (hl-todo-flycheck--occur-to-error))))
 
-(defun hl-todo-install-flycheck ()
+(defun hl-todo-flycheck--get-all-modes ()
   (interactive)
+  (mapcan (lambda (checker) (flycheck-checker-get checker 'modes))
+               flycheck-checkers))
+
+  
+
+(defun hl-todo-flycheck-install ()
+  (interactive)
+  
+  (flycheck-define-generic-checker 'hl-todo
+    "Syntax checker for test."
+    :start 'hl-todo-flycheck--start
+    :modes (hl-todo-flycheck--get-all-modes))
+
+  (add-to-list 'flycheck-checkers 'hl-todo t)
+
   (dolist (checker '(c/c++-clang c/c++-gcc c/c++-cppcheck emacs-lisp))
-    (message "%s" checker)
+    ;;(message "%s" checker)
     (flycheck-add-next-checker checker 'hl-todo)))
 
-(flycheck-define-generic-checker 'hl-todo
-  "Syntax checker for test."
-  :start 'flycheck-hl-todo-start
-  :modes '(text-mode prog-mode fundamental-mode c++-mode))
 
 
-(add-to-list 'flycheck-checkers 'hl-todo t)
