@@ -75,13 +75,23 @@
   
 (defvar hl-todo-flycheck-disabled-modes '())
 
+(defvar hl-todo-flycheck-enabled nil)
+
+(make-variable-buffer-local 'hl-todo-flycheck-enabled)
+
+(defun hl-todo-flycheck-enabled-p ()
+  hl-todo-flycheck-enabled)
+
 (defun hl-todo-flycheck-install ()
   (interactive)
+
+  (setq hl-todo-flycheck-enabled t)
 
   ;; Create hl-todo checker
   (flycheck-define-generic-checker 'hl-todo
     "Syntax checker for hl-todo."
     :start 'hl-todo-flycheck--start
+    :predicate 'hl-todo-flycheck-enabled-p
     :modes (hl-todo-flycheck--get-all-modes))
 
   ;; Register hl-todo checker
@@ -94,5 +104,11 @@
              (member checker hl-todo-flycheck-disabled-modes))
       (flycheck-add-next-checker checker 'hl-todo t))))
 
+(defun hl-todo-flycheck-uninstall ()
+  (interactive)
+  (setq hl-todo-flycheck-enabled nil))
+
+(provide hl-todo-flycheck)
+;;;
 
 
