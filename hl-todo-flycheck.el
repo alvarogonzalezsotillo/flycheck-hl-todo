@@ -1,8 +1,25 @@
-;;; package --- Summary
+;;; hl-todo-flycheck.el --- Display hl-todo keywords in flycheck.  -*- lexical-binding: t; -*-
+
+;; Author: Álvaro González Sotillo <alvarogonzalezsotillo@gmail.com>
+;; URL: https://github.com/alvarogonzalezsotillo/hl-todo-flycheck
+;; Package-Requires: ((emacs "25.1") (hl-todo) (flycheck))
+;; Version: 1.0
+;; Keywords: convenience
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; GNU General Public License v3.0. See COPYING for details.
 
 ;;; Commentary:
 
-
+;; 
+;;
+;; Quick start:
+;;
+;; Configure `hl-todo' and `flycheck'.
+;; Invoke `hl-todo-flycheck-enable' and open flyckeck error list.
 ;; Based on https://emacs.stackexchange.com/questions/29496/automatically-run-org-lint-through-flycheck
 ;; TODO: test with flycheck-projectile-list-errors
 
@@ -64,10 +81,15 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
            flycheck-checkers)))
 
 
-;; FIXME: Convert to customizable variable
-(defvar hl-todo-flycheck-disabled-modes '())
+(defgroup hl-todo-flycheck-group nil
+  "Integration of hl-todo and flycheck."
+  :group 'convenience)
 
+(defcustom hl-todo-flycheck-not-chained-checkers '()
+  "List of checkers to not be augmented with hl-todo."
+  :type 'list)
 
+;;;###autoload
 (defun hl-todo-flycheck-enable ()
   "Install and enable hl-todo-flycheck."
   (interactive)
@@ -87,12 +109,13 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
   (dolist (checker flycheck-checkers)
     (unless (or
              (eq checker 'hl-todo)
-             (member checker hl-todo-flycheck-disabled-modes))
+             (member checker hl-todo-flycheck-not-chained-checkers))
       (flycheck-add-next-checker checker 'hl-todo t)))
   
   ;; Force flycheck update
   (flycheck-buffer))
 
+;;;###autoload
 (defun hl-todo-flycheck-disable ()
   "Disable hl-todo-flycheck."
   (interactive)
