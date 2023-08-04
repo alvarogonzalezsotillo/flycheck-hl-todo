@@ -14,7 +14,8 @@
 ;; PROMT: elisp function that receives a regex and returns a list of
 ;; line numbers where the regex matches the current buffer
 (defun hl-todo-flycheck--occur-to-error (&optional buffer regex)
-  "Find lines in BUFFER where the given REGEX matches.  Return a list of (position text id)."
+  "Find lines in BUFFER where the given REGEX matches.
+Return a list of (position text id)."
   (let* ((buffer (or buffer (current-buffer)))
          (regex (or regex (hl-todo--regexp)))
          (occurrences '()))
@@ -36,19 +37,18 @@
     occurrences))
 
 (defun hl-todo-flycheck--start (checker callback)
-  "Start function of hl-todo checker.  CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
+  "Start function of hl-todo checker.
+CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
   ;;(message "hl-todo-flycheck--start")
-  (if (hl-todo-flycheck-enabled-p)
-      (funcall
-       callback 'finished
-       (mapcar (lambda (pos-msg-id)
-                 (let ((pos (nth 0 pos-msg-id))
-                       (msg (nth 1 pos-msg-id))
-                       (id  (nth 2 pos-msg-id)))
-                   ;;(message "nuevo error:%s %s" pos msg)
-                   (flycheck-error-new-at-pos pos 'info msg :id id :checker checker)))
-               (hl-todo-flycheck--occur-to-error)))
-    '()))
+  (funcall
+   callback 'finished
+   (mapcar (lambda (pos-msg-id)
+             (let ((pos (nth 0 pos-msg-id))
+                   (msg (nth 1 pos-msg-id))
+                   (id  (nth 2 pos-msg-id)))
+               ;;(message "nuevo error:%s %s" pos msg)
+               (flycheck-error-new-at-pos pos 'info msg :id id :checker checker)))
+           (hl-todo-flycheck--occur-to-error))))
 
 (defun hl-todo-flycheck--get-all-modes ()
   "Computes all modes referenced by existing checkers."
@@ -76,24 +76,29 @@
   (flycheck-define-generic-checker 'hl-todo
     "Syntax checker for hl-todo."
     :start 'hl-todo-flycheck--start
-    :predicate 'hl-todo-flycheck-enabled-p
     :modes (hl-todo-flycheck--get-all-modes))
 
   ;; Register hl-todo checker, and enable it
-  (add-to-list 'flycheck-checkers 'hl-todo t)
-  (flycheck-disable-checker 'hl-todo t)
+  (add-to-list 'flycheck-checkers 'hl-todo)
+  ;;(flycheck-disable-checker 'hl-todo t)
+  (setq flycheck-disabled-checkers (delete 'hl-todo flycheck-disabled-checkers))
   
   ;; Chain hl-todo checker to all existing checkers, except disabled modes, and self
   (dolist (checker flycheck-checkers)
     (unless (or
              (eq checker 'hl-todo)
              (member checker hl-todo-flycheck-disabled-modes))
-      (flycheck-add-next-checker checker 'hl-todo t))))
+      (flycheck-add-next-checker checker 'hl-todo t)))
+  
+  ;; Force flycheck update
+  (flycheck-buffer))
 
 (defun hl-todo-flycheck-disable ()
   "Disable hl-todo-flycheck."
   (interactive)
-  (flycheck-disable-checker 'hl-todo nil))
+  ;;(flycheck-disable-checker 'hl-todo nil)
+  (add-to-list 'flycheck-disabled-checkers 'hl-todo)
+  (flycheck-buffer))
 
 (provide 'hl-todo-flycheck)
 
