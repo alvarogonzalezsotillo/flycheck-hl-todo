@@ -3,15 +3,25 @@
 
 This package adds occurrences of =TODO= and other keywords as messages of [[https://www.flycheck.org/en/latest/][=flycheck=]]. The keywords are the same used by for [[https://github.com/tarsius/hl-todo][=hl-todo=]]
 
+
 * Install
 This package is not available on melpa yet. You can use straigh:
 #+begin_src emacs-lisp
 (use-package hl-todo-flycheck
   :ensure t
-  ;; Need to be initialized after the rest of checkers
-  :defer 5 
+  :defer 5  ; Need to be initialized after the rest of checkers
   :straight (:host github :repo "alvarogonzalezsotillo/hl-todo-flycheck")
   :config
-  (hl-todo-flycheck-enable)
+  (hl-todo-flycheck-setup)
 )
 #+end_src
+
+
+* How it works
+The checker =hl-todo= is registered as /next checker/ of every other checker found in =flycheck-checkers=. This way, =hl-todo= checker will be invoked after the predefined checker for the current major mode, and the results will be merged in flycheck error list.
+
+=hl-todo-flycheck-setup= should be called after all the other checkers has been registered.
+
+=hl-todo= checker can be disabled as any other checker, with =M-x= =flycheck-disable-checker=.
+
+
