@@ -67,7 +67,7 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
    (mapcan (lambda (checker)
              (let* ((modes (flycheck-checker-get checker 'modes))
                     ;; Ensure modes is a list
-                    (modes ( if (listp modes)
+                    (modes (if (listp modes)
                                modes
                              (list modes))))
                ;; Copy the list, to do not modify original list of checker
@@ -87,7 +87,7 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
   t
   "Buffer local variable to decide if the checker should be run." )
 
-(make-variable-buffer-local flycheck-hl-todo-enabled)
+(make-variable-buffer-local 'flycheck-hl-todo-enabled)
 
 (defun flycheck-hl-todo-enabled-p ()
   "Decide if the checker should generate errors."
@@ -96,19 +96,18 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
 ;; Create hl-todo checker
 (flycheck-define-generic-checker 'hl-todo
   "Syntax checker for hl-todo."
-  :start '#flycheck-hl-todo--start
-  :predicate '#flycheck-hl-todo-enabled-p
+  :start #'flycheck-hl-todo--start
+  :predicate #'flycheck-hl-todo-enabled-p
   :modes '(text-mode))
 
-
 ;;;###autoload
-(defun flycheck-hl-todo-enable ()
+(defun flycheck-hl-todo-setup ()
   "Install flycheck-hl-todo, and enable it in the current buffer."
   (interactive)
 
-  ;; Register hl-todo checker, and enable it
-  (add-to-list 'flycheck-checkers 'hl-todo)
-  (setq flycheck-hl-todo-enable t)
+  ;; Register hl-todo checker
+  ;; Add it to the end of the checkers list, it will be invoked via chained checkers
+  (add-to-list 'flycheck-checkers 'hl-todo t)
 
   ;; Add all modes to hl-todo checker
   (dolist (checker (flycheck-hl-todo--get-all-modes))
@@ -119,8 +118,16 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
     (unless (or
              (eq checker 'hl-todo)
              (member checker flycheck-hl-todo-not-chained-checkers))
-      (flycheck-add-next-checker checker 'hl-todo t)))
-  
+      (flycheck-add-next-checker checker 'hl-todo t))))
+
+;;;###autoload
+(defun flycheck-hl-todo-enable ()
+  "Enable flycheck-hl-todo in the current buffer."
+  (interactive)
+
+  (flycheck-hl-todo-setup)
+  (setq flycheck-hl-todo-enabled t)
+
   ;; Force flycheck update
   (flycheck-buffer))
 
@@ -128,7 +135,7 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
 (defun flycheck-hl-todo-disable ()
   "Disable flycheck-hl-todo in the current buffer."
   (interactive)
-  (setq flycheck-hl-todo-enable nil)
+  (setq flycheck-hl-todo-enabled nil)
 
   ;; Force flycheck update
   (flycheck-buffer))
