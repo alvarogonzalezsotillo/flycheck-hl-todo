@@ -1,12 +1,15 @@
 
 
-* Install
-This package is not available on melpa yet.
 
-You can use straigh:
+This package adds occurrences of =TODO= and other keywords as messages of [[https://www.flycheck.org/en/latest/][=flycheck=]]. The keywords are the same used by for [[https://github.com/tarsius/hl-todo][=hl-todo=]]
+
+* Install
+This package is not available on melpa yet. You can use straigh:
 #+begin_src emacs-lisp
 (use-package hl-todo-flycheck
   :ensure t
+  ;; Need to be initialized after the rest of checkers
+  :defer 5 
   :straight (:host github :repo "alvarogonzalezsotillo/hl-todo-flycheck")
   :config
   (hl-todo-flycheck-enable)
