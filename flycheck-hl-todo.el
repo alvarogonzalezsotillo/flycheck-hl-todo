@@ -1,8 +1,7 @@
-;;; hl-todo-flycheck.el --- Display hl-todo keywords in flycheck  -*- lexical-binding: t; -*-
-
+;;; flycheck-hl-todo.el --- Display hl-todo keywords in flycheck  -*- lexical-binding: t; -*-
 ;; Author: Álvaro González Sotillo <alvarogonzalezsotillo@gmail.com>
 ;; Homepage: https://github.com/alvarogonzalezsotillo/flycheck-hl-todo
-;; Package-Requires: ((emacs "25.1") (hl-todo) (flycheck))
+;; Package-Requires: ((emacs "25.1") (hl-todo "1.9.0") (flycheck "0.14"))
 ;; Version: 1.0
 ;; Keywords: convenience
 
@@ -93,6 +92,25 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
   "Decide if the checker should generate errors."
   flycheck-hl-todo-enabled)
 
+(defun flycheck-hl-todo-enable ()
+  "Enable flycheck-hl-todo in the current buffer."
+  (interactive)
+
+  (flycheck-hl-todo-setup)
+  (setq flycheck-hl-todo-enabled t)
+
+  ;; Force flycheck update
+  (flycheck-buffer))
+
+(defun flycheck-hl-todo-disable ()
+  "Disable flycheck-hl-todo in the current buffer."
+  (interactive)
+  (setq flycheck-hl-todo-enabled nil)
+
+  ;; Force flycheck update
+  (flycheck-buffer))
+
+
 ;; Create hl-todo checker
 (flycheck-define-generic-checker 'hl-todo
   "Syntax checker for hl-todo."
@@ -120,28 +138,7 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
              (member checker flycheck-hl-todo-not-chained-checkers))
       (flycheck-add-next-checker checker 'hl-todo t))))
 
-;;;###autoload
-(defun flycheck-hl-todo-enable ()
-  "Enable flycheck-hl-todo in the current buffer."
-  (interactive)
-
-  (flycheck-hl-todo-setup)
-  (setq flycheck-hl-todo-enabled t)
-
-  ;; Force flycheck update
-  (flycheck-buffer))
-
-;;;###autoload
-(defun flycheck-hl-todo-disable ()
-  "Disable flycheck-hl-todo in the current buffer."
-  (interactive)
-  (setq flycheck-hl-todo-enabled nil)
-
-  ;; Force flycheck update
-  (flycheck-buffer))
 
 (provide 'flycheck-hl-todo)
 
 ;;; flycheck-hl-todo.el ends here
-
-
