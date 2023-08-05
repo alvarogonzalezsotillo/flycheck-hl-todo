@@ -1,0 +1,14 @@
+
+
+* Install
+This package is not available on melpa yet.
+
+You can use straigh:
+#+begin_src emacs-lisp
+(use-package hl-todo-flycheck
+  :ensure t
+  :straight (:host github :repo "alvarogonzalezsotillo/hl-todo-flycheck")
+  :config
+  (hl-todo-flycheck-enable)
+)
+#+end_src
