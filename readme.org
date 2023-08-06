@@ -1,7 +1,7 @@
 
 
 
-This package adds occurrences of =TODO= and other keywords as messages of [[https://www.flycheck.org/en/latest/][=flycheck=]]. The keywords are the same used by for [[https://github.com/tarsius/hl-todo][=hl-todo=]]
+This package adds occurrences of =TODO= and other keywords as messages of [[https://www.flycheck.org/en/latest/][flycheck]]. The keywords are configured in [[https://github.com/tarsius/hl-todo][hl-todo]]
 
 [[file:flycheck-hl-todo-screenshot.png]]
 
@@ -18,15 +18,13 @@ This package is not available on melpa yet. You can use straigh:
 #+end_src
 
 * Customization
-flycheck-hl-todo-extra-modes
-flycheck-hl-todo-not-chained-checkers
-hl-todo-keyword-faces
+- =flycheck-hl-todo-extra-modes=: List of modes where this checker will be also avaliable. The checker will be available 
+- =flycheck-hl-todo-not-chained-checkers=: List of checkers that will not have this fchecker as next checker.
+- =hl-todo-keyword-faces=: This variable belongs to =hl-todo= package. It contains the keywords to be added as flycheck messages.
 
 * How it works
-The checker =hl-todo= is registered as /next checker/ of every other checker found in =flycheck-checkers=. This way, =hl-todo= checker will be invoked after the predefined checker for the current major mode, and the results will be merged in flycheck error list.
-
-=hl-todo-flycheck-setup= should be called after all the other checkers has been registered.
-
+=hl-todo-flycheck-setup= should be called after all the other checkers has been registered. The checker =hl-todo= is registered as [[https://www.flycheck.org/en/latest/user/syntax-checkers.html#configuring-checker-chains][next checker]] of every other checker found in =flycheck-checkers=. This way, =hl-todo= checker will be invoked after the installed checker for the current major mode, and the results will be merged in flycheck error list.
+ 
 =hl-todo= checker can be disabled as any other checker, with =M-x= =flycheck-disable-checker=.
 
 For convenience, the buffer local variable =flycheck-hl-todo-enabled= can be use to activate or deactivate this checker.

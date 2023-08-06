@@ -40,7 +40,8 @@ Return a list of (position text id)."
           (let ((case-fold-search nil)) ; Only exact case in search
             (while (re-search-forward regex nil t)
               (let* ((pos (point))
-                     (id (thing-at-point 'symbol))
+                     (id (thing-at-point 'word))
+                     (kk (message "id:%s" id))
                      (bol (line-beginning-position))
                      (eol (line-end-position))
                      (line-at-point (buffer-substring bol eol))
@@ -80,12 +81,13 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
 
 (defcustom flycheck-hl-todo-not-chained-checkers '()
   "List of checkers to not be augmented with hl-todo."
-  :type 'list)
+  :type '(repeat (symbol :tag "Flycheck checker")))
+
 
 (defcustom flycheck-hl-todo-extra-modes '()
   "List of additional major modes where hl-todo checker will be registered.
 All the modes of the checkers of `flycheck-checkers' will also be registered."
-  :type 'list)
+  :type '(repeat (symbol :tag "Mode")))
 
 (defvar flycheck-hl-todo-enabled
   t
