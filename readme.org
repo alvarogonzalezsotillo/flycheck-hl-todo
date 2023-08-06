@@ -6,19 +6,21 @@ This package adds occurrences of =TODO= and other keywords as messages of [[http
 [[file:flycheck-hl-todo-screenshot.png]]
 
 * Install
-This package is not available on melpa yet. You can use straigh:
+
+The package is not available on melpa yet. You can use [[https://github.com/radian-software/straight.el][straight]]:
 #+begin_src emacs-lisp
 (use-package hl-todo-flycheck
   :ensure t
   :defer 5  ; Need to be initialized after the rest of checkers
   :straight (:host github :repo "alvarogonzalezsotillo/flycheck-hl-todo")
   :config
-  (hl-todo-flycheck-setup)
-)
+  (hl-todo-flycheck-setup))
 #+end_src
 
+[[https://github.com/flycheck/flycheck][flycheck]] and [[https://github.com/tarsius/hl-todo][hl-todo]] should be installed.
+
 * Customization
-- =flycheck-hl-todo-extra-modes=: List of modes where this checker will be also avaliable. The checker will be available 
+- =flycheck-hl-todo-extra-modes=: The checker will be enabled on every mode where other checker is already registered. Use this variable to define a list of modes where this checker will be also avaliable, although there is no previous checker for them.
 - =flycheck-hl-todo-not-chained-checkers=: List of checkers that will not have this fchecker as next checker.
 - =hl-todo-keyword-faces=: This variable belongs to =hl-todo= package. It contains the keywords to be added as flycheck messages.
 
