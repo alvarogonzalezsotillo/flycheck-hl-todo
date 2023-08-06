@@ -21,7 +21,7 @@ The package is not available on melpa yet. You can use [[https://github.com/radi
 
 * Customization
 - =flycheck-hl-todo-extra-modes=: The checker will be enabled on every mode where other checker is already registered. Use this variable to define a list of modes where this checker will be also avaliable, although there is no previous checker for them.
-- =flycheck-hl-todo-not-chained-checkers=: List of checkers that will not have this fchecker as next checker.
+- =flycheck-hl-todo-not-chained-checkers=: List of checkers that will not have this checker as next checker.
 - =hl-todo-keyword-faces=: This variable belongs to =hl-todo= package. It contains the keywords to be added as flycheck messages.
 
 * How it works
