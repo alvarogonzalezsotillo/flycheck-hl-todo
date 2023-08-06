@@ -60,7 +60,7 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
                (flycheck-error-new-at-pos pos 'info msg :id id :checker checker)))
            (flycheck-hl-todo--occur-to-error))))
 
-(defun flycheck-hl-todo--get-all-modes ()
+(defun flycheck-hl-todo--get-all-modes-of-checkers ()
   "Computes all modes referenced by existing checkers."
   (seq-uniq
    (mapcan (lambda (checker)
@@ -80,6 +80,11 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
 
 (defcustom flycheck-hl-todo-not-chained-checkers '()
   "List of checkers to not be augmented with hl-todo."
+  :type 'list)
+
+(defcustom flycheck-hl-todo-extra-modes '()
+  "List of additional major modes where hl-todo checker will be registered.
+All the modes of the checkers of `flycheck-checkers' will also be registered."
   :type 'list)
 
 (defvar flycheck-hl-todo-enabled
@@ -128,8 +133,10 @@ CHECKER and CALLBACK are documented in `flycheck-define-generic-checker'."
   (add-to-list 'flycheck-checkers 'hl-todo t)
 
   ;; Add all modes to hl-todo checker
-  (dolist (checker (flycheck-hl-todo--get-all-modes))
-    (flycheck-add-mode 'hl-todo checker))
+  (dolist (mode (flycheck-hl-todo--get-all-modes-of-checkers))
+    (flycheck-add-mode 'hl-todo mode))
+  (dolist (mode flycheck-hl-todo-extra-modes)
+    (flycheck-add-mode 'hl-todo mode))
   
   ;; Chain hl-todo checker to all existing checkers, except disabled modes, and self
   (dolist (checker flycheck-checkers)
