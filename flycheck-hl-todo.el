@@ -7,9 +7,20 @@
 
 ;; This file is not part of GNU Emacs.
 
-;;; License:
+;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; GNU General Public License v3.0. See COPYING for details.
+;; This file is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation, either version 3 of the License,
+;; or (at your option) any later version.
+;;
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -19,6 +30,9 @@
 ;;
 ;; Configure `hl-todo' and `flycheck'.
 ;; Invoke `flycheck-hl-todo-enable' and open flyckeck error list.
+;;
+
+
 
 (require 'flycheck)
 (require 'hl-todo)
@@ -34,7 +48,8 @@ Return a list of (position text id)."
          (regex (or regex (hl-todo--regexp)))
          (occurrences '()))
     (with-current-buffer buffer
-      (with-syntax-table hl-todo--syntax-table ; TODO: from hl-todo-occur, dont know the actual effect
+      ;; REVIEW: hl-todo-occur use this sytax table, dont know the actual effect
+      (with-syntax-table hl-todo--syntax-table
         (save-excursion
           (goto-char (point-min))
           (let ((case-fold-search nil)) ; Only exact case in search
