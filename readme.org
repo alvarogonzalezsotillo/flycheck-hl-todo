@@ -24,7 +24,7 @@ This package adds occurrences of =TODO= and other keywords as messages of [[http
   :defer 5 ; Need to be initialized after the rest of checkers
   :straight (:host github :repo "alvarogonzalezsotillo/flycheck-hl-todo")
   :config
-  (hl-todo-flycheck-setup))
+  (flycheck-hl-todo-setup))
 #+end_src
 
 
