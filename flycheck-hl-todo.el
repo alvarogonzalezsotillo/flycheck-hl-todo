@@ -56,7 +56,6 @@ Return a list of (position text id)."
             (while (re-search-forward regex nil t)
               (let* ((pos (point))
                      (id (thing-at-point 'word))
-                     (kk (message "id:%s" id))
                      (bol (line-beginning-position))
                      (eol (line-end-position))
                      (line-at-point (buffer-substring bol eol))
