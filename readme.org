@@ -5,6 +5,14 @@ This package adds occurrences of =TODO= and other keywords as messages of [[http
 
 [[file:flycheck-hl-todo-screenshot.png]]
 
+
+* How it works
+=hl-todo-flycheck-setup= should be called after all the other checkers has been registered. The checker =hl-todo= is registered as [[https://www.flycheck.org/en/latest/user/syntax-checkers.html#configuring-checker-chains][next checker]] of every other checker found in =flycheck-checkers=. This way, =hl-todo= checker will be invoked after the installed checker for the current major mode, and the results will be merged in flycheck error list.
+ 
+=hl-todo= checker can be disabled as any other checker, with =M-x= =flycheck-disable-checker=.
+
+For convenience, the buffer local variable =flycheck-hl-todo-enabled= can be use to activate or deactivate this checker.
+
 * Install
 
 [[https://github.com/flycheck/flycheck][flycheck]] and [[https://github.com/tarsius/hl-todo][hl-todo]] should be installed, but this  package is not available on melpa yet. You can use [[https://github.com/radian-software/straight.el][straight]]:
@@ -44,10 +52,4 @@ This package adds occurrences of =TODO= and other keywords as messages of [[http
 - =flycheck-hl-todo-not-chained-checkers=: List of checkers that will not have this checker as next checker.
 - =hl-todo-keyword-faces=: This variable belongs to =hl-todo= package. It contains the keywords to be added as flycheck messages.
 
-* How it works
-=hl-todo-flycheck-setup= should be called after all the other checkers has been registered. The checker =hl-todo= is registered as [[https://www.flycheck.org/en/latest/user/syntax-checkers.html#configuring-checker-chains][next checker]] of every other checker found in =flycheck-checkers=. This way, =hl-todo= checker will be invoked after the installed checker for the current major mode, and the results will be merged in flycheck error list.
- 
-=hl-todo= checker can be disabled as any other checker, with =M-x= =flycheck-disable-checker=.
-
-For convenience, the buffer local variable =flycheck-hl-todo-enabled= can be use to activate or deactivate this checker.
 
