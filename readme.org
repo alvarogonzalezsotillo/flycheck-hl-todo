@@ -27,6 +27,17 @@ This package adds occurrences of =TODO= and other keywords as messages of [[http
   (flycheck-hl-todo-setup))
 #+end_src
 
+=hl-todo= and =flycheck-hl-todo= can be activated independently. If you prefer to enable =flycheck-hl-todo= only when =hl-todo-mode= is enabled, you can use the following code:
+
+#+begin_src emacs-lisp
+(defun flycheck-hl-todo-follow-mode ()
+  (setq flycheck-hl-todo-enabled hl-todo-mode)
+  ;; Force flycheck update
+  (flycheck-buffer))
+
+(add-hook 'hl-todo-mode-hook #'flycheck-hl-todo-follow-mode)
+#+end_src
+
 
 * Customization
 - =flycheck-hl-todo-extra-modes=: The checker will be enabled on every mode where other checker is already registered. Use this variable to define a list of modes where this checker will be also avaliable, although there is no previous checker for them.
