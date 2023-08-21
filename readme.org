@@ -1,4 +1,4 @@
-
+[[https://melpa.org/#/flycheck-hl-todo][file:https://melpa.org/packages/flycheck-hl-todo-badge.svg]]
 
 
 This package adds occurrences of =TODO= and other keywords as messages of [[https://www.flycheck.org/en/latest/][flycheck]]. The keywords are configured in [[https://github.com/tarsius/hl-todo][hl-todo]]
@@ -15,7 +15,9 @@ For convenience, the buffer local variable =flycheck-hl-todo-enabled= can be use
 
 * Install
 
-[[https://github.com/flycheck/flycheck][flycheck]] and [[https://github.com/tarsius/hl-todo][hl-todo]] should be installed, but this  package is not available on melpa yet. You can use [[https://github.com/radian-software/straight.el][straight]]:
+This package is [[https://melpa.org/#/flycheck-hl-todo][available on Melpa]].
+
+The following is an example of installation using [[https://github.com/radian-software/straight.el][straight]] and [[https://github.com/jwiegley/use-package][use-package]]. [[https://github.com/flycheck/flycheck][flycheck]] and [[https://github.com/tarsius/hl-todo][hl-todo]] should be installed as dependencies.
 
 #+begin_src emacs-lisp
 
