@@ -29,7 +29,7 @@ The following is an example of installation using [[https://github.com/radian-so
   (global-flycheck-mode 1))
 
 
-(use-package hl-todo-flycheck
+(use-package flycheck-hl-todo
   :ensure t
   :defer 5 ; Need to be initialized after the rest of checkers
   :straight (:host github :repo "alvarogonzalezsotillo/flycheck-hl-todo")
